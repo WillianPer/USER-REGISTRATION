@@ -1,11 +1,14 @@
 {
-    "users": [{
-        "id": 1,
-        "name": "Willian S. Pereira",
-        "email": "wsresilienttasteshopw@gmail.com"
-    }, {
-        "id": 2,
-        "name": "Wilson Pereira",
-        "email": "wilsonpereiraoficial072@gmail.com"
-    }]
+  "users": [
+    {
+      "id": 1,
+      "name": "Willian S. Pereira",
+      "email": "wsresilienttasteshopw@gmail.com"
+    },
+    {
+      "id": 2,
+      "name": "Wilson Pereira",
+      "email": "wilsonpereiraoficial072@gmail.com"
+    }
+  ]
 }
