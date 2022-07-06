@@ -18,6 +18,12 @@ export default class UserCrud extends Component {
 
     state = { ...initialState }
 
+    componentWillMount() {
+        axios(baseUrl).then(resp => {
+            this.setState({list: resp.data})
+        })
+    }
+
     clear() {
         this.setState({ user: initialState.user })
     }
@@ -35,7 +41,8 @@ export default class UserCrud extends Component {
 
     getUpdatedList(user) {
         const list = this.state.list.filter(u => u.id !== user.id)
-        list.unshift(user)
+        // list.unshift(user)
+        if (user) list.unshift(user)
         return list
     }
 
@@ -52,7 +59,7 @@ export default class UserCrud extends Component {
                     <div className="col-12 col-md-6">
                         <label>Nome</label>
                         <input type="text" name="name" className="form-control"
-                        value={this.state.user.name} 
+                        value={this.state.user.name.id} 
                         onChange={e => this.updateField(e)} 
                         placeholder="Digite o nome..." />
                     </div>
@@ -61,7 +68,7 @@ export default class UserCrud extends Component {
                         <div className="form-group">
                             <label>Email</label>
                             <input type="text" name="email" className="form-control"
-                            value={this.state.user.email} 
+                            value={this.state.user.email.id} 
                             onChange={e => this.updateField(e)} 
                             placeholder="Digite o Email..." />
                         </div>
@@ -87,7 +94,38 @@ export default class UserCrud extends Component {
         )
     }
 
+    load(user) {
+        this.setState({user})
+    }
+
+    remove(user) {
+        axios.delete(`${baseUrl}/${user.id}`).then(resp => {
+            // const list = this.state.list.filter(u => u !== user)
+            const list = this.getUpdatedList(null)
+            this.setState({list})
+        })
+    }
+
+    renderTable() {
+        return (
+            <table className="table mt-4">
+                <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th>E-mail</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+                </tbody>
+            </table>
+        )
+    }
+
     render() {
+        console.log(this.state.list)
+
         return (
             <Main { ...headerProps}>
                 {this.renderForm()}
