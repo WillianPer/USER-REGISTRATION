@@ -39,16 +39,16 @@ export default class UserCrud extends Component {
             })
     }
 
-    getUpdatedList(user) {
+    getUpdatedList(user, add = true) {
         const list = this.state.list.filter(u => u.id !== user.id)
         // list.unshift(user)
-        if (user) list.unshift(user)
+        if (add) list.unshift(user)
         return list
     }
 
     updateField(event){
-        const user = { ...this.state.user }
-        user[event.target.name] = event.target.name
+        const user = {...this.state.user}
+        user[event.target.name] = event.target.value
         this.setState({user})
     }
 
@@ -58,8 +58,8 @@ export default class UserCrud extends Component {
                 <div className="row">
                     <div className="col-12 col-md-6">
                         <label>Nome</label>
-                        <input type="text" name="name" className="form-control"
-                        value={this.state.user.name.id} 
+                        <input type="text" name='name' className="form-control"
+                        value={this.state.user.name} 
                         onChange={e => this.updateField(e)} 
                         placeholder="Digite o nome..." />
                     </div>
@@ -68,7 +68,7 @@ export default class UserCrud extends Component {
                         <div className="form-group">
                             <label>Email</label>
                             <input type="text" name="email" className="form-control"
-                            value={this.state.user.email.id} 
+                            value={this.state.user.email} 
                             onChange={e => this.updateField(e)} 
                             placeholder="Digite o Email..." />
                         </div>
@@ -101,7 +101,7 @@ export default class UserCrud extends Component {
     remove(user) {
         axios.delete(`${baseUrl}/${user.id}`).then(resp => {
             // const list = this.state.list.filter(u => u !== user)
-            const list = this.getUpdatedList(null)
+            const list = this.getUpdatedList(user, false)
             this.setState({list})
         })
     }
@@ -111,16 +111,39 @@ export default class UserCrud extends Component {
             <table className="table mt-4">
                 <thead>
                     <tr>
+                        <th>ID</th>
                         <th>Nome</th>
                         <th>E-mail</th>
                         <th>Ações</th>
                     </tr>
                 </thead>
                 <tbody>
-                    
+                    {this.renderRows()}
                 </tbody>
             </table>
         )
+    }
+
+    renderRows() {
+        return this.state.list.map(user => {
+            return (
+                <tr key={user.id}>
+                    <td>{user.id}</td>
+                    <td>{user.name}</td>
+                    <td>{user.email}</td>
+                    <td>
+                        <button className="btn btn-warning"
+                        onClick={() => this.load(user)}>
+                            <i className="fa fa-pencil"></i>
+                        </button>
+                        <button className="btn btn-danger ml-2"
+                        onClick={() => this.remove(user)}>
+                            <i className="fa fa-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+            )
+        })
     }
 
     render() {
@@ -129,6 +152,7 @@ export default class UserCrud extends Component {
         return (
             <Main { ...headerProps}>
                 {this.renderForm()}
+                {this.renderTable()}
             </Main>
         )
     }
