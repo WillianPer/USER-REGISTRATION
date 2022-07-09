@@ -79,7 +79,7 @@ footer.footer {
             var(--menu-top-height)
             1fr
             var(--footer-height);
-        grid-template-rows: 1fr;
+        grid-template-columns: 1fr;
         grid-template-areas: 
             "logo"
             "menu"
